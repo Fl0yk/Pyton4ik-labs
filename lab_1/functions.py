@@ -15,3 +15,7 @@ def doOperfirstNumtion(firstNum, secondNum, op):
         return "Попытка деления на ноль"
     else:
         return "Такой функции нету"
+
+
+def evenNumbers(listNum):
+    return [num for num in listNum if num % 2 == 0]
