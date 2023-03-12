@@ -1,7 +1,7 @@
 from functions import amount_of_sent, non_dec_sent, averege_len_word, averege_len_sent, n_grams
 from constans import K
 import re
-with open('lab_2/test_file.txt') as f:
+with open('test_file.txt') as f:
     text = f.read()
 print(text)
 
@@ -14,4 +14,6 @@ print(f"average length of the sentence in characters (words count only): {avereg
 
 print(f"average length of the word in the text in characters: {averege_len_word(text)}")
 
-print(n_grams(text, n = 2)[:K])
+print(f"top-{K} repeated 2-grams in the text:")
+for gram in n_grams(text, n = 2)[:K]:
+    print(gram)
