@@ -7,3 +7,25 @@ OTHER_ABBREVIATIONS = (r"etc\.", r"Re\.", r"p\.", r"exp\.", r"err\.", r"et\.al\.
                        r"cm\.", r"qt\.", r"p\.m\.")
 
 K = 10
+
+ADD = "add"
+REMOVE = "remove"
+EXIT = "exit"
+FIND = "find"
+GREP = "grep"
+LIST = "list"
+SAVE = "save"
+LOAD = "load"
+SWITCH = "switch"
+HELP = "help"
+PATH = "./Containers/"
+YES = "y"
+NO = "n"
+HELP_ME = "help"
+HELP_COMMANDS = "add <key> - add one element\n\
+remove <key> - delete key from container\n\
+find <key> - print a element if it has found it\n\
+list - print all elements of container\n\
+grep <regex> - check the value by regular\n\
+switch - switches to another user\n\
+load - load container from file\n"

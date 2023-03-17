@@ -1,5 +1,6 @@
 import re
-from constans import NAME_ABBREVIATIONS, OTHER_ABBREVIATIONS
+from constans import *
+from my_container import Container, UsersAndContainers
 
 def clear_text(text):
     word = re.sub(r'\"[\w\d\s,\'!?.]*[?!]\"\s[a-z]',"A,",text) #прямая речь - начало предложения, но с ! или ?
@@ -29,7 +30,6 @@ def amount_of_sent(text):
 
 def non_dec_sent(text):
     return len(re.findall(r"[!?]", clear_text(text)))
-    
 
 def give_all_words(text):
     textik = re.sub(r"\b\d+e[+-]\d+|\b\d+[.,]?\d+|\b\d+"," ", text)
@@ -74,3 +74,64 @@ def n_grams(text, n = 4):
             
     
     return sorted(ngrams.items(), key = lambda x: x[1], reverse = True)
+
+def menu():
+    input_str = " "
+    users_conteiners = UsersAndContainers()
+    current_container = Container()
+    
+    print("Input your username")
+    current_user = username_check(input())
+    users_conteiners.add_user(current_user)
+    current_container.load(users_conteiners.find_user(current_user))
+    
+    while(input_str != EXIT):
+        input_str = input()
+        func = input_str.split()[0]
+        if(len(func) + 1 < len(input_str)):
+            params = input_str[len(func) + 1::]
+        else:
+            params = " "
+        
+        if(func == ADD):
+            current_container.add(params)
+        elif (func == REMOVE):
+            current_container.remove(params)
+        elif (func == FIND):
+            print(current_container.find(params))
+        elif (func == LIST):
+            current_container.list()
+        elif (func == GREP):
+            print(current_container.grep(params))
+        elif (func == HELP_ME):
+            print(HELP_COMMANDS)
+        elif (func == LOAD):
+            current_container.load(PATH + params)
+        elif (func == SWITCH):
+            print("You want save container?(y/n)")
+            if(yes_no(input())):
+                current_container.save(users_conteiners.find_user(current_user))
+            print("Input your username")
+            current_user = username_check(input())
+            users_conteiners.add_user(current_user)
+        elif (func == EXIT):
+            print("You want save container?(y/n)")
+            if(yes_no(input())):
+                current_container.save(users_conteiners.find_user(current_user))
+        print("----------------------------------\n")
+            
+                
+def username_check(username : str):
+    while(re.findall(r"[?!#$\"/\\\s]+", username)):
+        print("Incorrect input. Please, try again:")
+        username = input()
+    return username
+
+def yes_no(y_n : str):
+    while(True):
+        if(y_n == YES):
+            return True
+        elif (y_n == NO):
+            return False
+        print("Incorrect input. Please, try again:")
+        y_n = input()
