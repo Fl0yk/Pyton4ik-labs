@@ -106,7 +106,7 @@ def menu():
         elif (func == HELP_ME):
             print(HELP_COMMANDS)
         elif (func == LOAD):
-            current_container.load(PATH + params)
+            current_container.load(PATH + "Containers/" + params + "Container.txt")
         elif (func == SWITCH):
             print("You want save container?(y/n)")
             if(yes_no(input())):
@@ -114,6 +114,9 @@ def menu():
             print("Input your username")
             current_user = username_check(input())
             users_conteiners.add_user(current_user)
+            del current_container
+            current_container = Container()
+            current_container.load(users_conteiners.find_user(current_user))
         elif (func == EXIT):
             print("You want save container?(y/n)")
             if(yes_no(input())):

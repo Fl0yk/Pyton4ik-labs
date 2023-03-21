@@ -1,0 +1,9 @@
+Pupo4ek ./Containers/Pupo4ekContainer.txt
+Pupik ./Containers/PupikContainer.txt
+floyk /home/floyk/Рабочий
+floyk2 ./Containers/floyk2Container.txt
+pupik ./Containers/pupikContainer.txt
+pip123 /home/floyk/Рабочий
+pipka ./Containers/pipkaContainer.txt
+a /home/floyk/Рабочий стол/IGI-Labs/Pyton4ik-labs/lab_2/Files/Containers/aContainer.txt
+testDocker /home/floyk/Рабочий

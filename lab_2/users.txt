@@ -1,5 +1,0 @@
-Pupo4ek ./Containers/Pupo4ekContainer.txt
-Pupik ./Containers/PupikContainer.txt
-floyk ./Containers/floykContainer.txt
-floyk2 ./Containers/floyk2Container.txt
-pupik ./Containers/pupikContainer.txt

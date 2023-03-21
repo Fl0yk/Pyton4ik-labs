@@ -54,7 +54,7 @@ class Container:
         else:
             with open(path, 'r') as file:
                 load_elem = set(elem.rstrip() for elem in file.readlines())
-            print(load_elem)
+            #print(load_elem)
             self._add_set(load_elem)
         
         
@@ -62,18 +62,18 @@ class UsersAndContainers:
     
     def __init__(self):
         self.__users = dict()
-        with open("users.txt", 'r') as file:
+        with open(PATH + "Containers/" + "users.txt", 'r') as file:
             for user_cont in file.readlines():
                 user_cont = user_cont.split()
                 self.__users[user_cont[0]] = user_cont[1]
                 
     def __del__(self):
-        with open("users.txt", 'w') as file:
+        with open(PATH  + "Containers/" + "users.txt", 'w') as file:
             for user in self.__users:
                 file.write(user + " " + self.__users[user] + "\n")
                 
     def add_user(self, username : str):
-        self.__users[username] = PATH + username + "Container.txt"
+        self.__users[username] = PATH + "Containers/" + username + "Container.txt"
         
     def find_user(self, username : str):
         return self.__users[username]

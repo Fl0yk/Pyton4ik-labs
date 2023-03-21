@@ -1,3 +1,5 @@
+import os
+
 NAME_ABBREVIATIONS = (r"\bMr\.", r"\bMrs\.", r"Dr\.", r"St\.", r"Blvd\.", r"Ave\.", r"Sq\.",
                       r"Rd\.", r"Bldg\.", r"B\.Sc\.", r"M\.A\.", r"Ph\.D\.", r"M\.D\.", r"LT\.")
 
@@ -18,7 +20,7 @@ SAVE = "save"
 LOAD = "load"
 SWITCH = "switch"
 HELP = "help"
-PATH = "./Containers/"
+PATH = "/home/floyk/Рабочий стол/IGI-Labs/Pyton4ik-labs/lab_2/Files/" #os.path.abspath(__file__).replace("/constans.py", "/") + "Files/"
 YES = "y"
 NO = "n"
 HELP_ME = "help"
