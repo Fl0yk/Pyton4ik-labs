@@ -74,8 +74,8 @@ class UsersAndContainers:
         self.__users = dict()
         with open(PATH + "Containers/" + "users.txt", 'r') as file:
             for user_cont in file.readlines():
-                user_cont = user_cont.split()
-                self.__users[user_cont[0]] = user_cont[1]
+                tmp = user_cont.split()
+                self.__users[tmp[0]] = user_cont.rstrip()[len(tmp[0]) + 1::]
                 
     def __del__(self):
         with open(PATH  + "Containers/" + "users.txt", 'w') as file:

@@ -1,9 +1,7 @@
-Pupo4ek ./Containers/Pupo4ekContainer.txt
-Pupik ./Containers/PupikContainer.txt
-floyk /home/floyk/Рабочий
-floyk2 ./Containers/floyk2Container.txt
-pupik ./Containers/pupikContainer.txt
+Pupo4ek /home/floyk/Рабочий стол/IGI-Labs/Pyton4ik-labs/lab_2/Files/Containers/Pupo4ekContainer.txt
+Pupik /home/floyk/Рабочий стол/IGI-Labs/Pyton4ik-labs/lab_2/Files/Containers/PupikContainer.txt
+floyk /home/floyk/Рабочий стол/IGI-Labs/Pyton4ik-labs/lab_2/Files/Containers/floykContainer.txt
+floyk2 /home/floyk/Рабочий стол/IGI-Labs/Pyton4ik-labs/lab_2/Files/Containers/floyk2Container.txt
+pupik /home/floyk/Рабочий стол/IGI-Labs/Pyton4ik-labs/lab_2/Files/Containers/pupikContainer.txt
 pip123 /home/floyk/Рабочий стол/IGI-Labs/Pyton4ik-labs/lab_2/Files/Containers/pip123Container.txt
 pipka /home/floyk/Рабочий стол/IGI-Labs/Pyton4ik-labs/lab_2/Files/Containers/pipkaContainer.txt
-a /home/floyk/Рабочий
-testDocker /home/floyk/Рабочий
