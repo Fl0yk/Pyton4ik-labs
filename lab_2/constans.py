@@ -33,4 +33,6 @@ find <key> - print a element if it has found it\n\
 list - print all elements of container\n\
 grep <regex> - check the value by regular\n\
 switch - switches to another user\n\
-load - load container from file\n"
+load - load container from file\n\
+save - save container\n\
+exit - exit from programm\n"

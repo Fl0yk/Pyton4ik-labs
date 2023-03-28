@@ -87,6 +87,9 @@ def menu():
     
     while(input_str != EXIT):
         input_str = input()
+        if (input_str.isspace() or input_str == ""):
+            print(ERROR_INPUT)
+            continue
         func = input_str.split()[0]
         if(len(func) + 1 < len(input_str)):
             params = input_str[len(func) + 1::]
@@ -126,8 +129,9 @@ def menu():
         print("----------------------------------\n")
             
                 
-def username_check(username : str):                     #Т.к. контейнер пользователя - отдельный файл,
-    while(re.findall(r"[?!#$\"/\\\s]+", username)):     #в названии которого есть имя, то на всякий случай
+def username_check(username : str):                     
+    while(re.findall(r"[?!#$\"/\\\s]+", username)       #Т.к. контейнер пользователя - отдельный файл,
+            or username.isspace() or username == ""):   #в названии которого есть имя, то на всякий случай
         print(ERROR_INPUT)                              #при обращении к файлу, имя должно быть нормальным
         username = input()
     return username

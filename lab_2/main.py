@@ -1,5 +1,5 @@
 from functions import amount_of_sent, non_dec_sent, averege_len_word, averege_len_sent, n_grams, menu
-from constans import K, PATH
+from constans import K, PATH  
 
 if __name__ == "__main__":
     print(PATH, "     ", PATH + 'test_file.txt')
