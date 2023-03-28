@@ -1,29 +1,39 @@
 import re
-from constans import PATH
+from constans import PATH, NOT_ELEM, ERROR_ADD
 
 class Container:
     
     def __init__(self, *args):
-        self.__container = set(args)
+        self.__container = set()
+        try:                            #Т.к. некоторые типы даных не хешируемые, то добавление оберрнул в трай кетч
+            self.__container.update(set(args))
+        except Exception:
+            print(ERROR_ADD)
         
     def __str__(self):
         return self.__container.__str__()
     
     
     def find(self, *args):
-        elements = self.__container.intersection(args)
+        elements = self.__container.intersection(*args)
         if elements:
             return elements
         
-        return "No such elements"
+        return NOT_ELEM
     
     def add(self, *args):
-        self.__container.update(set(args))
+        try:
+            self.__container.update(set(args))
+        except Exception:
+            print(ERROR_ADD)
         
     def _add_set(self, my_set : set):
         self.__container.update(my_set)
         
     def remove(self, element):
+        if (element not in self.__container):
+            return
+        
         self.__container.remove(element)
         
     def grep(self, regex : str):
@@ -36,7 +46,7 @@ class Container:
         if result:
             return result
         
-        return "No such elements"
+        return NOT_ELEM
     
     def list(self):
         for elem in self.__container:
@@ -48,7 +58,7 @@ class Container:
             
     def load(self, path : str):
         try:
-            file = open(path)
+            file = open(path)       #Точно ли нормально работает? По поводу открытия файла без закрытия
         except IOError:
             print("file does not exist")
         else:

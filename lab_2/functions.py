@@ -8,35 +8,35 @@ def clear_text(text):
     word = re.sub(r'\"[\w\d\s,\'!?.]*,\"','A,',word) #прямая речь - начало предложения
     word = re.sub(r'\"[\w\d\s,\'!?.]*[?!.]\"','A.',word) #прямая речь - отдельное предложение
     #print(word)
-    word = re.sub(r"[A-Z]. [A-Z]. [A-Z]", " ", word)
+    word = re.sub(r"[A-Z]\. [A-Z]\. [A-Z]", " ", word) #Сокращения имен
     
-    for abbr in NAME_ABBREVIATIONS:
+    for abbr in NAME_ABBREVIATIONS:     #Сокращения, после которых идут имена и названия улиц
         word = re.sub(abbr, " ", word)
     
-    for abbr in OTHER_ABBREVIATIONS:
+    for abbr in OTHER_ABBREVIATIONS:    #Сокращения, которыми может заканчиваться предложение
         word = re.sub(abbr + r"\s[A-Z]", ". ", word)
         word = re.sub(abbr, " ", word)
     
-    word = re.sub(r"\w+\.\w+"," ", word)
+    word = re.sub(r"\w+\.\w+"," ", word)     #Точки в местах по типу названий файлов(main.py) 
 
-    word = re.sub(r"\.\s\.\s\.",".", word)
+    word = re.sub(r"\.\s\.\s\.",".", word)  #Многоточие меняем на 1 точку
     
     #print(word)
 
     return word
 
-def amount_of_sent(text):
+def amount_of_sent(text):   #Количество предложений
     return len(re.findall(r"[.!?]", clear_text(text)))
 
-def non_dec_sent(text):
+def non_dec_sent(text): #Колчиство предложений с ! и ?
     return len(re.findall(r"[!?]", clear_text(text)))
 
-def give_all_words(text):
+def give_all_words(text):  #Получаем все слова
     textik = re.sub(r"\b\d+e[+-]\d+|\b\d+[.,]?\d+|\b\d+"," ", text)
     textik = re.sub(r"[!.?\",']", " ", textik)
     return textik.split()
 
-def averege_len_sent(text):
+def averege_len_sent(text): #Средняя длинна преддложений в символах
     count_sent = amount_of_sent(text)
     if(not count_sent):
         return 0
@@ -47,7 +47,7 @@ def averege_len_sent(text):
 
     return round(len_words / count_sent)
 
-def averege_len_word(text):
+def averege_len_word(text): #Средняя длинна слов
     len_words = 0
     all_words = give_all_words(text)
     if not len(all_words):
@@ -58,7 +58,7 @@ def averege_len_word(text):
         
     return round(len_words / len(all_words))
 
-def n_grams(text, n = 4):
+def n_grams(text, n = 4): #Подряд идущие слова
     text = text.lower()
     words = give_all_words(text)
     ngrams = dict()
@@ -101,6 +101,8 @@ def menu():
             print(current_container.find(params))
         elif (func == LIST):
             current_container.list()
+        elif (func == SAVE):
+            current_container.save(users_conteiners.find_user(current_user));
         elif (func == GREP):
             print(current_container.grep(params))
         elif (func == HELP_ME):
@@ -108,7 +110,7 @@ def menu():
         elif (func == LOAD):
             current_container.load(PATH + "Containers/" + params + "Container.txt")
         elif (func == SWITCH):
-            print("You want save container?(y/n)")
+            print(SAVE_CONTAINER)
             if(yes_no(input())):
                 current_container.save(users_conteiners.find_user(current_user))
             print("Input your username")
@@ -118,15 +120,15 @@ def menu():
             current_container = Container()
             current_container.load(users_conteiners.find_user(current_user))
         elif (func == EXIT):
-            print("You want save container?(y/n)")
+            print(SAVE_CONTAINER)
             if(yes_no(input())):
                 current_container.save(users_conteiners.find_user(current_user))
         print("----------------------------------\n")
             
                 
-def username_check(username : str):
-    while(re.findall(r"[?!#$\"/\\\s]+", username)):
-        print("Incorrect input. Please, try again:")
+def username_check(username : str):                     #Т.к. контейнер пользователя - отдельный файл,
+    while(re.findall(r"[?!#$\"/\\\s]+", username)):     #в названии которого есть имя, то на всякий случай
+        print(ERROR_INPUT)                              #при обращении к файлу, имя должно быть нормальным
         username = input()
     return username
 
@@ -136,5 +138,5 @@ def yes_no(y_n : str):
             return True
         elif (y_n == NO):
             return False
-        print("Incorrect input. Please, try again:")
+        print(ERROR_INPUT)
         y_n = input()
