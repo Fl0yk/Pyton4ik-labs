@@ -15,7 +15,7 @@ class Container:
     
     
     def find(self, *args):
-        elements = self.__container.intersection(*args)
+        elements = self.__container.intersection(args)
         if elements:
             return elements
         
@@ -75,6 +75,7 @@ class UsersAndContainers:
         with open(PATH + "Containers/" + "users.txt", 'r') as file:
             for user_cont in file.readlines():
                 tmp = user_cont.split()
+                #Чтоб отделить путь от пользователя, убираем спец символы в конце строки и срезаем помле имени и пробела
                 self.__users[tmp[0]] = user_cont.rstrip()[len(tmp[0]) + 1::]
                 
     def __del__(self):
