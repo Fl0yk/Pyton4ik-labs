@@ -1,7 +1,14 @@
-Pupo4ek /home/floyk/Рабочий стол/IGI-Labs/Pyton4ik-labs/lab_2/Files/Containers/Pupo4ekContainer.txt
-Pupik /home/floyk/Рабочий стол/IGI-Labs/Pyton4ik-labs/lab_2/Files/Containers/PupikContainer.txt
-floyk /home/floyk/Рабочий стол/IGI-Labs/Pyton4ik-labs/lab_2/Files/Containers/floykContainer.txt
-floyk2 /home/floyk/Рабочий стол/IGI-Labs/Pyton4ik-labs/lab_2/Files/Containers/floyk2Container.txt
-pupik /home/floyk/Рабочий стол/IGI-Labs/Pyton4ik-labs/lab_2/Files/Containers/pupikContainer.txt
-pip123 /home/floyk/Рабочий стол/IGI-Labs/Pyton4ik-labs/lab_2/Files/Containers/pip123Container.txt
-pipka /home/floyk/Рабочий стол/IGI-Labs/Pyton4ik-labs/lab_2/Files/Containers/pipkaContainer.txt
+Pupo4ek Files/Containers/Pupo4ekContainer.txt
+Pupik Files/Containers/PupikContainer.txt
+floyk Files/Containers/floykContainer.txt
+floyk2 Files/Containers/floyk2Container.txt
+pupik Files/Containers/pupikContainer.txt
+pip123 Files/Containers/pip123Container.txt
+pipka Files/Containers/pipkaContainer.txt
+test1 Files/Containers/test1Container.txt
+testA Files/Containers/testAContainer.txt
+testB Files/Containers/testBContainer.txt
+a Files/Containers/aContainer.txt
+test_A Files/Containers/test_AContainer.txt
+test_B Files/Containers/test_BContainer.txt
+Daria Files/Containers/DariaContainer.txt

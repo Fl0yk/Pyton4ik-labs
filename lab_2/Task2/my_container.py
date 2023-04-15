@@ -1,11 +1,12 @@
 import re
-from constans import PATH, NOT_ELEM, ERROR_ADD
+import os
+from Task2.Constans import PATH, NOT_ELEM, ERROR_ADD, INVALID_REGEX
 
 class Container:
     
     def __init__(self, *args):
         self.__container = set()
-        try:                            #Т.к. некоторые типы даных не хешируемые, то добавление оберрнул в трай кетч
+        try:
             self.__container.update(set(args))
         except Exception:
             print(ERROR_ADD)
@@ -38,11 +39,13 @@ class Container:
         
     def grep(self, regex : str):
         result = list()
-        
-        for elem in self.__container:
-            if (re.fullmatch(regex, elem.__str__())):
-                result.append(elem.__str__())
-        
+        try:
+            for elem in self.__container:
+                if (re.fullmatch(regex, elem.__str__())):
+                    result.append(elem.__str__())
+        except Exception:
+            return INVALID_REGEX
+               
         if result:
             return result
         
@@ -58,7 +61,7 @@ class Container:
             
     def load(self, path : str):
         try:
-            file = open(path)       #Точно ли нормально работает? По поводу открытия файла без закрытия
+            file = open(path)
         except IOError:
             print("file does not exist")
         else:
@@ -72,19 +75,19 @@ class UsersAndContainers:
     
     def __init__(self):
         self.__users = dict()
-        with open(PATH + "Containers/" + "users.txt", 'r') as file:
+        with open(os.path.join(PATH, "users.txt"), 'r') as file:
             for user_cont in file.readlines():
                 tmp = user_cont.split()
                 #Чтоб отделить путь от пользователя, убираем спец символы в конце строки и срезаем помле имени и пробела
                 self.__users[tmp[0]] = user_cont.rstrip()[len(tmp[0]) + 1::]
                 
     def __del__(self):
-        with open(PATH  + "Containers/" + "users.txt", 'w') as file:
+        with open(os.path.join(PATH, "users.txt"), 'w') as file: #PATH + "users.txt"
             for user in self.__users:
                 file.write(user + " " + self.__users[user] + "\n")
                 
     def add_user(self, username : str):
-        self.__users[username] = PATH + "Containers/" + username + "Container.txt"
+        self.__users[username] = os.path.join(PATH, username + "Container.txt") #PATH + username + "Container.txt"
         
     def find_user(self, username : str):
         return self.__users[username]

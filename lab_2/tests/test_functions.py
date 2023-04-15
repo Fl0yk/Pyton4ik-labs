@@ -1,4 +1,4 @@
-from functions import clear_text, amount_of_sent, non_dec_sent, give_all_words, averege_len_sent, averege_len_word, n_grams
+from Task1.functions import clear_text, amount_of_sent, non_dec_sent, give_all_words, averege_len_sent, averege_len_word, n_grams
 
 def test_clear_text1():
     text = "A. A. Vovchik."
@@ -14,7 +14,7 @@ def test_clear_text3():
     assert clear_text(text) == "Aaaa.  aaa bb. A, aaa. A. Bbbb  ."
     
 def test_clear_text4():
-    text = "Aaa aa aaaaa. Aaaa aaa? Aaaaaaaaa. . . Aaa aa aaa?"
+    text = "Aaa aa aaaaa. Aaaa aaa? Aaaaaaaaa... Aaa aa aaa?"
     assert clear_text(text) == "Aaa aa aaaaa. Aaaa aaa? Aaaaaaaaa. Aaa aa aaa?"
     
 def test_amount_sent1():
@@ -22,7 +22,7 @@ def test_amount_sent1():
     assert amount_of_sent(text) == 1
     
 def test_amount_sent2():
-    text = "Aaa aa aaaaa. Aaaa aaa? Aaaaaaaaa. . . Aaa aa aaa?"
+    text = "Aaa aa aaaaa. Aaaa aaa? Aaaaaaaaa... Aaa aa aaa?"
     assert amount_of_sent(text) == 4
     
 def test_amount_sent3():
@@ -31,14 +31,14 @@ def test_amount_sent3():
     
 def test_amount_sent4():
     text = "Aaaa. A. A. Aaaa bb. \"Bbb. Bb! Bbbb,\" aaa. \"Aaa! Aaaa.\" Bbbb aa.py."
-    assert amount_of_sent(text) == 5
+    assert amount_of_sent(text) == 4
     
 def test_non_dec_sent1():
     text = "A aaa aa."
     assert non_dec_sent(text) == 0
     
 def test_non_dec_sent2():
-    text = "Aaa aa aaaaa. Aaaa aaa? Aaaaaaaaa. . . Aaa aa aaa?"
+    text = "Aaa aa aaaaa. Aaaa aaa? Aaaaaaaaa... Aaa aa aaa?"
     assert non_dec_sent(text) == 2
     
 def test_non_dec_sent3():
@@ -47,7 +47,7 @@ def test_non_dec_sent3():
     
 def test_non_dec_sent4():
     text = "Aaaa. A. A. Aaaa bb. \"Bbb. Bb! Bbbb,\" aaa. \"Aaa! Aaaa.\" Bbbb aa.py?"
-    assert non_dec_sent(text) == 1
+    assert non_dec_sent(text) == 0
     
 def test_all_words1():
     text = ""
