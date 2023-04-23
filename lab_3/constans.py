@@ -1,5 +1,6 @@
 CODE = ("co_argcount",
-        ".co_kwonlyargcount",
+        "co_posonlyargcount",
+        "co_kwonlyargcount",
         "co_nlocals",
         "co_stacksize",
         "co_flags",
@@ -9,8 +10,10 @@ CODE = ("co_argcount",
         "co_varnames",
         "co_filename",
         "co_name",
+        #"co_qualname",
         "co_firstlineno",
         "co_lnotab",
+        #"co_exceptiontable",
         "co_freevars",
         "co_cellvars")
 

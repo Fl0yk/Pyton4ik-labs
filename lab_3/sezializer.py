@@ -1,6 +1,7 @@
 import re
 import inspect
 import types
+import builtins
 from constans import CODE, BASE_TYPE, BASE_COLLECTION
 
 
@@ -26,6 +27,15 @@ def serialize(obj):
         ser["type"] = "function"
         ser["value"] = ser_func(obj)
         
+    elif (inspect.iscode(obj)):
+        ser["type"] = "code"
+        args = dict()
+        for (k, v) in inspect.getmembers(obj):
+            #print(k, v, type(v))
+            if (k in CODE):
+                args[k] = serialize(v)
+        ser["value"] = args
+        
     elif (not obj):
         ser["type"] = "NoneType"
         ser["value"] = None
@@ -49,6 +59,7 @@ def ser_func(func):
     args = dict()
     
     for (k, v) in inspect.getmembers(func.__code__):
+        #print(k, v, type(v))
         if (k in CODE):
             args[k] = serialize(v)
             
@@ -63,7 +74,7 @@ def get_globals(func):
     for glob_var in func.__code__.co_names:
         if (glob_var in func.__globals__):
             if (isinstance(func.__globals__[glob_var], types.ModuleType)):
-                glob[glob_var] = serialize(func.__globals__[glob_var].__name__)
+                glob["module " + glob_var] = serialize(func.__globals__[glob_var].__name__)
                 
             elif (glob_var != func.__code__.co_name):
                 glob[glob_var] = serialize(func.__globals__[glob_var])
@@ -80,6 +91,30 @@ def deserialize(obj : dict):
     
     elif (obj["type"] in BASE_COLLECTION):
         return gener_collection(obj["type"], obj["value"])
+    
+    elif (obj["type"] == "function"):
+        return deser_func(obj["value"])
+    
+    elif (obj["type"] == "code"):
+        code = obj["value"]
+        return types.CodeType(deserialize(code["co_argcount"]),
+                              deserialize(code["co_posonlyargcount"]),
+                              deserialize(code["co_kwonlyargcount"]),
+                              deserialize(code["co_nlocals"]),
+                              deserialize(code["co_stacksize"]),
+                              deserialize(code["co_flags"]),
+                              deserialize(code["co_code"]),
+                              deserialize(code["co_consts"]),
+                              deserialize(code["co_names"]),
+                              deserialize(code["co_varnames"]),
+                              deserialize(code["co_filename"]),
+                              deserialize(code["co_name"]),
+                              #deserialize(code["co_qualname"]),
+                              deserialize(code["co_firstlineno"]),
+                              deserialize(code["co_lnotab"]),
+                              #deserialize(code["co_exeptiontable"]),
+                              deserialize(code["co_freevars"]),
+                              deserialize(code["co_cellvars"]))
     
     
     
@@ -108,3 +143,44 @@ def gener_collection(_type, obj):
         return bytearray(deserialize(o) for o in obj)
     elif (_type == "bytes"):
         return bytes(deserialize(o) for o in obj)
+    
+    
+def deser_func(obj):
+    code = obj["__code__"]
+    globs = obj["__globals__"]
+    res_globs = dict()
+    
+    for k in obj["__globals__"]:
+        #print(k, type(k), "   ", globs[k], type(globs[k]))
+        if ("module" in k):
+            #print("IMPORT", globs[k]["value"])
+            res_globs[globs[k]["value"]] = __import__(globs[k]["value"])
+            
+        
+        elif (globs[k] != obj["__name__"]):
+            #print(k, "aba", globs[k])
+            res_globs[k] = deserialize(globs[k])
+       
+    codeType = types.CodeType(deserialize(code["co_argcount"]),
+                              deserialize(code["co_posonlyargcount"]),
+                              deserialize(code["co_kwonlyargcount"]),
+                              deserialize(code["co_nlocals"]),
+                              deserialize(code["co_stacksize"]),
+                              deserialize(code["co_flags"]),
+                              deserialize(code["co_code"]),
+                              deserialize(code["co_consts"]),
+                              deserialize(code["co_names"]),
+                              deserialize(code["co_varnames"]),
+                              deserialize(code["co_filename"]),
+                              deserialize(code["co_name"]),
+                              #deserialize(code["co_qualname"]),
+                              deserialize(code["co_firstlineno"]),
+                              deserialize(code["co_lnotab"]),
+                              #deserialize(code["co_exeptiontable"]),
+                              deserialize(code["co_freevars"]),
+                              deserialize(code["co_cellvars"]))
+    
+    funcRes = types.FunctionType(code=codeType, globals=res_globs)
+    funcRes.__globals__.update({funcRes.__name__ : funcRes})
+    
+    return funcRes
