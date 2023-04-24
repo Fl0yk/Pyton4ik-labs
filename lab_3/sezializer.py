@@ -40,17 +40,23 @@ def serialize(obj):
         ser["type"] = "cell"
         ser["value"] = serialize(obj.cell_contents)
         
+    elif inspect.isclass(obj):
+        ser["type"] = "class"
+        ser["value"] = ser_class(obj)
+        
     elif (not obj):
         ser["type"] = "NoneType"
         ser["value"] = "Null"
         
-    
-    
+    else:
+        print(obj, type(obj))
+        raise NotImplemented
+          
     return ser
 
 
 
-def ser_func(func):
+def ser_func(func, cls=None):
     if (not inspect.isfunction(func)):
         return
     
@@ -58,7 +64,7 @@ def ser_func(func):
     
     ser_value_func["__name__"] = func.__name__
     
-    ser_value_func["__globals__"] = get_globals(func)
+    ser_value_func["__globals__"] = get_globals(func, cls)
     
     if (func.__closure__):
         ser_value_func["__closure__"] =serialize(func.__closure__)
@@ -77,21 +83,61 @@ def ser_func(func):
     return ser_value_func
         
 
-def get_globals(func):
+def get_globals(func, cls=None):
     glob = dict()
     
     for glob_var in func.__code__.co_names:
         if (glob_var in func.__globals__):
             if (isinstance(func.__globals__[glob_var], types.ModuleType)):
                 glob["module " + glob_var] = serialize(func.__globals__[glob_var].__name__)
+            
+            elif (inspect.isclass(func.__globals__[glob_var])):
+                if (cls and func.__globals__[glob_var] != cls) or (not cls):
+                    glob[glob_var] = serialize(func.__globals__[glob_var])
+                    
                 
             elif (glob_var != func.__code__.co_name):
                 glob[glob_var] = serialize(func.__globals__[glob_var])
             
+            #на случай рекурсии
             else:
                 glob[glob_var] = serialize(func.__name__)
                 
     return glob
+
+
+def ser_class(obj):
+    ser = dict()
+    ser["__name__"] = serialize(obj.__name__)
+    
+    for member in inspect.getmembers(obj):
+        #if(member[0].startswith("__")):
+        #if (member[0] in HUETA):
+        if (member[0] in ("__name__", "__base__", "__bases__",
+                          "__basicsize__", "__dictoffset__", "__class__") or 
+            type(member[1]) in (
+                types.WrapperDescriptorType,
+                types.MethodDescriptorType,
+                types.BuiltinFunctionType,
+                types.GetSetDescriptorType,
+                types.MappingProxyType
+            )):
+            continue
+        if (inspect.ismethod(member[1])):
+            ser[member[0]] = ser_func(member[1].__func__, obj)
+        #видимо, декоратор - не метод)
+        elif inspect.isfunction(member[1]):
+            ser[member[0]] = {"type" : "function", "value": ser_func(member[1], obj)}
+        else:
+            #print(member[0])
+            #k = input()
+            #if(k == "e"):
+                #return
+            ser[member[0]] = serialize(member[1])
+            
+    ser["__bases__"] = serialize(tuple(ser_class(base) for base in obj.__bases__ if base != object))
+    
+    return ser
 
 
 def deserialize(obj : dict):
@@ -130,7 +176,10 @@ def deserialize(obj : dict):
                               deserialize(code["co_cellvars"]))
 
     elif (obj["type"] == "cell"):
-        return types.CellType(deserialize(obj["value"]))    
+        return types.CellType(deserialize(obj["value"])) 
+    
+    elif (obj["type"] == "class"):
+        return deser_class(obj["value"])   
     
     
 def generator_type(_type, obj):
@@ -203,3 +252,21 @@ def deser_func(obj):
     funcRes.__globals__.update({funcRes.__name__ : funcRes})
     
     return funcRes
+
+
+def deser_class(obj):
+    bases = deserialize(obj["__bases__"])
+    members = dict()
+    
+    for member, value in obj.items():
+        #print(member, value)
+        members[member] = deserialize(value)
+        
+    clas = type(deserialize(obj["__name__"]), bases, members)
+    
+    #чтоб не было бесконечной рекурсии метода и класса
+    for k, member in members.items():
+        if (inspect.isfunction(member)):
+            member.__globals__.update({clas.__name__ : clas})
+            
+    return clas
