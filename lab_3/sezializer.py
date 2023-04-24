@@ -17,7 +17,7 @@ def serialize(obj):
         
     elif (isinstance(obj, dict)):
         ser["type"] = get_base_type()
-        ser["value"] = [[serialize(key), serialize(value)] for (key, value) in obj.items()]
+        ser["value"] = [serialize([k, v]) for (k, v) in obj.items()]
     
     elif (isinstance(obj, (str, int, float, bool, complex))):
         ser["type"] = get_base_type()
@@ -36,9 +36,13 @@ def serialize(obj):
                 args[k] = serialize(v)
         ser["value"] = args
         
+    elif (isinstance(obj, types.CellType)):
+        ser["type"] = "cell"
+        ser["value"] = serialize(obj.cell_contents)
+        
     elif (not obj):
         ser["type"] = "NoneType"
-        ser["value"] = None
+        ser["value"] = "Null"
         
     
     
@@ -56,6 +60,11 @@ def ser_func(func):
     
     ser_value_func["__globals__"] = get_globals(func)
     
+    if (func.__closure__):
+        ser_value_func["__closure__"] =serialize(func.__closure__)
+    else:
+        ser_value_func["__closure__"] = serialize(tuple())
+        
     args = dict()
     
     for (k, v) in inspect.getmembers(func.__code__):
@@ -86,11 +95,15 @@ def get_globals(func):
 
 
 def deserialize(obj : dict):
+    #print(type(obj))
     if (obj["type"] in BASE_TYPE):
         return generator_type(obj["type"], obj["value"])
     
     elif (obj["type"] in BASE_COLLECTION):
         return gener_collection(obj["type"], obj["value"])
+    
+    elif (obj["type"] == "dict"):
+        return dict(gener_collection("list", obj["value"]))
     
     elif (obj["type"] == "function"):
         return deser_func(obj["value"])
@@ -115,7 +128,9 @@ def deserialize(obj : dict):
                               #deserialize(code["co_exeptiontable"]),
                               deserialize(code["co_freevars"]),
                               deserialize(code["co_cellvars"]))
-    
+
+    elif (obj["type"] == "cell"):
+        return types.CellType(deserialize(obj["value"]))    
     
     
 def generator_type(_type, obj):
@@ -148,6 +163,7 @@ def gener_collection(_type, obj):
 def deser_func(obj):
     code = obj["__code__"]
     globs = obj["__globals__"]
+    closures = obj["__closure__"]
     res_globs = dict()
     
     for k in obj["__globals__"]:
@@ -160,6 +176,9 @@ def deser_func(obj):
         elif (globs[k] != obj["__name__"]):
             #print(k, "aba", globs[k])
             res_globs[k] = deserialize(globs[k])
+     
+    #print(closures)        
+    closure = tuple(deserialize(closures))
        
     codeType = types.CodeType(deserialize(code["co_argcount"]),
                               deserialize(code["co_posonlyargcount"]),
@@ -180,7 +199,7 @@ def deser_func(obj):
                               deserialize(code["co_freevars"]),
                               deserialize(code["co_cellvars"]))
     
-    funcRes = types.FunctionType(code=codeType, globals=res_globs)
+    funcRes = types.FunctionType(code=codeType, globals=res_globs, closure=closure)
     funcRes.__globals__.update({funcRes.__name__ : funcRes})
     
     return funcRes
