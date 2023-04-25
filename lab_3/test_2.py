@@ -1,5 +1,6 @@
 from sezializer import *
 import math
+from json_ser import JsonSerializer
 
 def ser_test(obj):
     ser_obj = serialize(obj)
@@ -63,6 +64,9 @@ class B:
 class C(A, B):
     def __init__(self):   
         self.coca = "Cola"
+        
+    def abobus(self, k):
+        return k
     
     
 
@@ -122,15 +126,24 @@ print("===============================")
 #Сериализация объекта
 o = C()
 print("Изначальные значения")
+print(o.abobus(5))
 print("Переменная объекта: ", o.coca)
 print("Статический метод класса А: ", o.ret_bob())
 print("Статический декорированный метод класса B: ", o.another_method(10))
 
-o_ser = serialize(o)
+js = JsonSerializer()
+
+with open("formater.json", "w") as file:
+    js.dump(o, file)
+#o_ser = serialize(o)
 #print(o_ser)
-des_o = deserialize(o_ser)
+
+#des_o = deserialize(o_ser)
+with open("formater.json", "r") as file:
+    des_o = js.load(file)
 
 print("Десериализованные значения")
+print(des_o.abobus(5))
 print("Переменная объекта: ", des_o.coca)
 print("Статический метод класса А: ", des_o.ret_bob())
 print("Статический декорированный метод класса B: ", des_o.another_method(10))
