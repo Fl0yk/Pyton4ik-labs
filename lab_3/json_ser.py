@@ -5,7 +5,7 @@ import regex
 
 class JsonSerializer:
     INT_P = r"[+-]?\d+"
-    FLOAT_P = r"(?:[+-]?\d+(?:\.\d+)?(?:e[+-]?))"
+    FLOAT_P = r"(?:[+-]?\d+(?:\.\d+)?(?:e[+-]?\d+)?)"
     BOOL_P = r"((?:true)|(?:false))\b"
     STR_P = r"\"(?:(?:\\\")|[^\"])*\""
     NONE_P = r"\b(?:Null)\b"
@@ -86,8 +86,9 @@ class JsonSerializer:
 
         if (string.startswith("{") and string.endswith("}")):
             string = string[1:-1]
+            #print(string)
             matches = regex.findall(self.VALUE_P, string)
-
+            #print(len(matches), matches)
             return {self.find_elem(matches[i][0]):
                      self.find_elem(matches[i+1][0])
                     for i in range(0, len(matches), 2)}

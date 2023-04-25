@@ -1,13 +1,13 @@
 from data_test import my_func, my_decorator, for_dec, A, B, C
-from json_ser import JsonSerializer
+from xml_ser import XMLSerializer
 
-js = JsonSerializer()
+js = XMLSerializer()
 
 def ser_test(obj):
-    with open("formater.json", "w") as file:
+    with open("xmlformat.xml", "w") as file:
         js.dump(obj, file)
     
-    with open("formater.json", "r") as file:
+    with open("xmlformat.xml", "r") as file:
         des_obj = js.load(file)
     
     print(des_obj)
@@ -15,13 +15,13 @@ def ser_test(obj):
     
 def ser_test_func(obj, arg):
     print(obj(arg))
-    with open("formater.json", "w") as file:
+    with open("xmlformat.xml", "w") as file:
         js.dump(obj, file)
     
     #print(ser_obj)
     print()
     
-    with open("formater.json", "r") as file:
+    with open("xmlformat.xml", "r") as file:
         des_obj = js.load(file)
     
     print(des_obj(arg))
@@ -47,14 +47,14 @@ ser_test(bytearray(b'hello world!'))
 ser_test_func(my_func, 3)
 
 #сериализация самого декоратора
-with open("formater.json", "w") as file:
+with open("xmlformat.xml", "w") as file:
         js.dump(my_decorator, file)
 
 for_dec(25)    
 #print(ser_obj)
 print()
     
-with open("formater.json", "r") as file:
+with open("xmlformat.xml", "r") as file:
         des_obj = js.load(file)
 
 df = des_obj(for_dec)
@@ -73,11 +73,11 @@ l = lambda b: b + 25
 
 ser_test_func(l, 10)
 
-with open("formater.json", "w") as file:
+with open("xmlformat.xml", "w") as file:
         js.dump(A, file)
 #print(cl)
 
-with open("formater.json", "r") as file:
+with open("xmlformat.xml", "r") as file:
         des_cl = js.load(file)
 a = des_cl()
 
@@ -96,13 +96,13 @@ print("Статический метод класса А: ", o.ret_bob())
 print("Статический декорированный метод класса B: ", o.another_method(10))
 
 
-with open("formater.json", "w") as file:
+with open("xmlformat.xml", "w") as file:
     js.dump(o, file)
 #o_ser = serialize(o)
 #print(o_ser)
 
 #des_o = deserialize(o_ser)
-with open("formater.json", "r") as file:
+with open("xmlformat.xml", "r") as file:
     des_o = js.load(file)
 
 print("Десериализованные значения")

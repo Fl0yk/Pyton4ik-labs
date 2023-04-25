@@ -1,4 +1,4 @@
-def check_integer(num):
+def check_integer(num : str):
     while not num.isdigit():
         num = input("Введите число, пожалуйста: ")
     return int(num)
