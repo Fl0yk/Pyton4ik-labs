@@ -31,8 +31,9 @@ def my_func(a):
 def my_decorator(func):
     def wrapper(*args, **kwargs):
         print("func start")
-        func(*args, **kwargs)
+        res = func(*args, **kwargs)
         print("Func end")
+        return res
         
     return wrapper
 
@@ -40,8 +41,10 @@ def my_decorator(func):
 def for_dec(a):
     print("Hello World!", a)
     
+X = 12
 class A:
     bob = "sinii"
+    
     
     @staticmethod
     def ret_bob():
@@ -49,6 +52,19 @@ class A:
     
     def my_method(self, x):
         return x + 5
+
+class B:
+    @staticmethod
+    @my_decorator
+    def another_method(k):
+        print("Hi:)")
+        return math.sin(k * X)
+
+class C(A, B):
+    def __init__(self):   
+        self.coca = "Cola"
+    
+    
 
 ser_test(12)
 
@@ -102,3 +118,21 @@ print(des_cl.ret_bob())
 print(a.my_method(5))
 
 print("===============================")
+
+#Сериализация объекта
+o = C()
+print("Изначальные значения")
+print("Переменная объекта: ", o.coca)
+print("Статический метод класса А: ", o.ret_bob())
+print("Статический декорированный метод класса B: ", o.another_method(10))
+
+o_ser = serialize(o)
+#print(o_ser)
+des_o = deserialize(o_ser)
+
+print("Десериализованные значения")
+print("Переменная объекта: ", des_o.coca)
+print("Статический метод класса А: ", des_o.ret_bob())
+print("Статический декорированный метод класса B: ", des_o.another_method(10))
+
+

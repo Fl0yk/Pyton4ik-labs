@@ -1,7 +1,6 @@
 import re
 import inspect
 import types
-import builtins
 from constans import CODE, BASE_TYPE, BASE_COLLECTION
 
 
@@ -49,8 +48,8 @@ def serialize(obj):
         ser["value"] = "Null"
         
     else:
-        print(obj, type(obj))
-        raise NotImplemented
+        ser["type"] = "object"
+        ser["value"] = ser_object(obj)
           
     return ser
 
@@ -110,10 +109,11 @@ def ser_class(obj):
     ser = dict()
     ser["__name__"] = serialize(obj.__name__)
     
-    for member in inspect.getmembers(obj):
+    for mem in obj.__dict__: #inspect.getmembers(obj):
         #if(member[0].startswith("__")):
-        #if (member[0] in HUETA):
-        if (member[0] in ("__name__", "__base__", "__bases__",
+        #тут можно сдлеать ифы в списках
+        member = [mem, obj.__dict__[mem]]
+        if (member[0] in ("__name__", "__base__",
                           "__basicsize__", "__dictoffset__", "__class__") or 
             type(member[1]) in (
                 types.WrapperDescriptorType,
@@ -123,9 +123,22 @@ def ser_class(obj):
                 types.MappingProxyType
             )):
             continue
-        if (inspect.ismethod(member[1])):
+        
+        if (member[0] == "ret_bob" and False):
+            print("\n\nBOB")
+            print(mem, obj.__dict__)
+            print(member[1], ser_func(member[1].__func__, obj))
+        if (isinstance(obj.__dict__[member[0]], staticmethod)):
+            ser[member[0]] = {"type" : "staticmethod",
+                              "value" : {"type" : "function",
+                                         "value": ser_func(member[1].__func__, obj)}}
+        elif (isinstance(obj.__dict__[member[0]], classmethod)):
+            ser[member[0]] = {"type" : "classmethod",
+                              "value" : {"type" : "function",
+                                         "value": ser_func(member[1].__func__, obj)}}
+        elif (inspect.ismethod(member[1])):
             ser[member[0]] = ser_func(member[1].__func__, obj)
-        #видимо, декоратор - не метод)
+            
         elif inspect.isfunction(member[1]):
             ser[member[0]] = {"type" : "function", "value": ser_func(member[1], obj)}
         else:
@@ -134,14 +147,38 @@ def ser_class(obj):
             #if(k == "e"):
                 #return
             ser[member[0]] = serialize(member[1])
-            
-    ser["__bases__"] = serialize(tuple(ser_class(base) for base in obj.__bases__ if base != object))
-    
+    #print("\nbase")
+    #for base in obj.__bases__:
+        #print(base, type(base))     
+    #print("tuple", tuple(ser_class(base) for base in obj.__bases__ if base != object))  
+    ser["__bases__"] = {"type" : "tuple",
+                        "value" :
+                            [serialize(base) for base in obj.__bases__ if base != object]}
+    #print(ser["__bases__"])
     return ser
 
 
+def ser_object(obj):
+    ser = dict()
+    ser["__class__"] = serialize(obj.__class__)
+    #print("\n", ser["__class__"],"\n")
+    members = dict()
+    
+    for k, v in inspect.getmembers(obj):
+        if (k.startswith("__") or 
+            inspect.isfunction(v) or
+            inspect.ismethod(v)):
+            continue
+        members[k] = serialize(v)
+        
+    ser["__members__"] = members
+    
+    return ser
+        
+
+
 def deserialize(obj : dict):
-    #print(type(obj))
+    #print(obj, type(obj))
     if (obj["type"] in BASE_TYPE):
         return generator_type(obj["type"], obj["value"])
     
@@ -152,6 +189,7 @@ def deserialize(obj : dict):
         return dict(gener_collection("list", obj["value"]))
     
     elif (obj["type"] == "function"):
+        #print("type func value none", obj)
         return deser_func(obj["value"])
     
     elif (obj["type"] == "code"):
@@ -179,7 +217,16 @@ def deserialize(obj : dict):
         return types.CellType(deserialize(obj["value"])) 
     
     elif (obj["type"] == "class"):
-        return deser_class(obj["value"])   
+        return deser_class(obj["value"])
+    
+    elif (obj["type"] == "staticmethod"):
+        return staticmethod(deserialize(obj["value"]))
+    
+    elif (obj["type"] == "classmethod"):
+        return classmethod(deserialize(obj["value"]))  
+    
+    elif (obj["type"] == "object"):
+        return deser_object(obj["value"]) 
     
     
 def generator_type(_type, obj):
@@ -210,6 +257,7 @@ def gener_collection(_type, obj):
     
     
 def deser_func(obj):
+    #print(obj)
     code = obj["__code__"]
     globs = obj["__globals__"]
     closures = obj["__closure__"]
@@ -266,7 +314,23 @@ def deser_class(obj):
     
     #чтоб не было бесконечной рекурсии метода и класса
     for k, member in members.items():
+        #print("\ntype\n", type(member), "\n")
         if (inspect.isfunction(member)):
             member.__globals__.update({clas.__name__ : clas})
-            
+        elif isinstance(member, (staticmethod, classmethod)):
+            member.__func__.__globals__.update({clas.__name__ : clas})
+    #print("\n\n", clas, "\n\n")
     return clas
+
+
+def deser_object(obj):
+    clas = deserialize(obj["__class__"])
+    members = dict()
+    
+    for k, v in obj["__members__"].items():
+        members[k] = deserialize(v)
+        
+    res = object.__new__(clas)
+    res.__dict__ = members
+    
+    return res
