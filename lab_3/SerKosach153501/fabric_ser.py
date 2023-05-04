@@ -1,5 +1,6 @@
-from json_ser import JsonSerializer
-from xml_ser import XMLSerializer
+from SerKosach153501.xml_ser import XMLSerializer
+from SerKosach153501.json_ser import JsonSerializer
+
 
 class Fabric:
     

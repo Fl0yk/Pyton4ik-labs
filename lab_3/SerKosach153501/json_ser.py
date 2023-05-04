@@ -1,4 +1,4 @@
-from sezializer import serialize, deserialize
+from SerKosach153501.sezializer import serialize, deserialize
 import regex
 
 
@@ -14,8 +14,7 @@ class JsonSerializer:
     LIST_RECURSION = r"\[(?R)?(?:,(?R))*\]"
     VALUE_RECURSION = r"\{(?:(?R):(?R))?(?:,(?R):(?R))*\}"
     
-    VALUE_P = fr"\s*({STR_P}|{FLOAT_P}|{BOOL_P}|{INT_P}|{NONE_P}|{COMPLEX_P}\
-                    |{LIST_RECURSION}|{VALUE_RECURSION}\s*)"
+    VALUE_P = fr"\s*({LIST_RECURSION}|{VALUE_RECURSION}|{STR_P}|{FLOAT_P}|{BOOL_P}|{INT_P}|{NONE_P}|{COMPLEX_P}\s*)"
     
     def dumps(self, obj):
         obj = serialize(obj)
@@ -81,6 +80,7 @@ class JsonSerializer:
         
         if (string.startswith("[") and string.endswith("]")):
             string = string[1:-1]
+            #print("LIST", string)
             matches = regex.findall(self.VALUE_P, string)
             return [self.find_elem(match[0]) for match in matches]
 

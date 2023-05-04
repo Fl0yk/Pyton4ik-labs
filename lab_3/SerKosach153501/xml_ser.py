@@ -1,4 +1,4 @@
-from sezializer import serialize, deserialize
+from SerKosach153501.sezializer import serialize, deserialize
 import regex
 
 class XMLSerializer:

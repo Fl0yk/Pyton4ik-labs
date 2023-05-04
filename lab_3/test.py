@@ -1,5 +1,5 @@
-from data_test import my_func, my_decorator, for_dec, A, B, C
-from xml_ser import XMLSerializer
+from tests.data_test import my_func, my_decorator, for_dec, A, B, C
+from SerKosach153501.xml_ser import XMLSerializer
 
 js = XMLSerializer()
 

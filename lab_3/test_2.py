@@ -1,5 +1,5 @@
-from data_test import my_func, my_decorator, for_dec, A, B, C
-from json_ser import JsonSerializer
+from tests.data_test import my_func, my_decorator, for_dec, A, B, C
+from SerKosach153501.json_ser import JsonSerializer
 
 js = JsonSerializer()
 
@@ -104,6 +104,8 @@ with open("formater.json", "w") as file:
 #des_o = deserialize(o_ser)
 with open("formater.json", "r") as file:
     des_o = js.load(file)
+    
+print(type(des_o), des_o)
 
 print("Десериализованные значения")
 print(des_o.abobus(5))
