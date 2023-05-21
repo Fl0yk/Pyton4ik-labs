@@ -1,0 +1,14 @@
+{% extends "ParkingApp/layout.html" %}
+<html>
+<head>
+    <title>{{ title }}</title>
+    {% load static %} <!-- Instruct Django to load static files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'site.css' %}" />
+</head>
+<body>
+    {% block content %}
+    <span class="message">{{ message }}</span>{{ content }}
+    {% endblock %}
+    <div><a href="about">About</a></div>
+</body>
+</html>
