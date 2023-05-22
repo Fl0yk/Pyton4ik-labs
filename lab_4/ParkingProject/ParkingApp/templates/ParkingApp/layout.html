@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>{{ title }}</title>
+    <title>Auto Parking</title>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'site.css' %}" />
 </head>
@@ -18,7 +18,7 @@
         {% block content %}{% endblock %}
         <hr />
         <footer>
-            <p>&copy; 2018</p>
+            {{ content }}
         </footer>
     </div>
 </body>

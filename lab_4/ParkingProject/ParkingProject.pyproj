@@ -47,6 +47,7 @@
   <ItemGroup>
     <Content Include="ParkingApp\static\site.css" />
     <Content Include="ParkingApp\templates\ParkingApp\about.html" />
+    <Content Include="ParkingApp\templates\ParkingApp\empty_place_list.html" />
     <Content Include="ParkingApp\templates\ParkingApp\index.html" />
     <Content Include="ParkingApp\templates\ParkingApp\layout.html" />
     <Content Include="requirements.txt" />
