@@ -1,0 +1,30 @@
+{% extends "ParkingApp/layout.html" %}
+
+{% block content %}
+<form action="createAuto/" method="POST">
+    {% csrf_token %}
+    <p>
+        <label>Input brand</label><br>
+        <input type="text" name="brand"/>
+    </p>
+    <p>
+        <label>Input model</label><br>
+        <input type="text" name="model" />
+    </p>
+    <input type="submit" value="Save" />
+</form>
+{% if object_list %}
+<h1>All my cars</h1>
+
+<ul>
+    {% for car in object_list %}
+    <li>
+        Brand: {{ car.brand }} Model: {{ car.model }} <a href="editAuto/{{ car.id }}">Edit</a> | <a href="deleteAuto/{{ car.id }}">Delete</a>
+    </li>
+    {% endfor %}
+
+</ul>
+{% else %}
+<p>You don't have cars'</p>
+{% endif %}
+{% endblock %}

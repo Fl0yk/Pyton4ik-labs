@@ -1,0 +1,15 @@
+{% extends "ParkingApp/layout.html" %}
+
+{% block content %}
+<h1>Client Details</h1>
+<ul>
+    <li>Name: {{ client.name }}</li>
+    <li>Number: {{ client.number }}</li>
+    <li>Balance: {{ client.balance }}</li>
+    <li><a href="{% url 'user_cars' %}">My cars</a></li>
+    <li><a href="{% url 'user_places' %}">My parking places</a></li>
+    <li><a href="#">My checks</a></li>
+    <li><a href="#">Take a place</a></li>
+    <li><a href="#">Top up balance</a></li>
+</ul>
+{% endblock %}

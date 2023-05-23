@@ -1,0 +1,16 @@
+{% extends "ParkingApp/layout.html" %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <p>
+        <label>Input brand</label><br>
+        <input type="text" name="brand" value="{{ car.brand }}" />
+    </p>
+    <p>
+        <label>Input model</label><br>
+        <input type="text" name="model" value="{{ car.model }}" />
+    </p>
+    <input type="submit" value="Save" />
+</form>
+{% endblock %}

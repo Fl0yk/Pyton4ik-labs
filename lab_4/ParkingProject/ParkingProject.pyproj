@@ -47,9 +47,15 @@
   <ItemGroup>
     <Content Include="ParkingApp\static\site.css" />
     <Content Include="ParkingApp\templates\ParkingApp\about.html" />
+    <Content Include="ParkingApp\templates\ParkingApp\edit_auto.html" />
     <Content Include="ParkingApp\templates\ParkingApp\empty_place_list.html" />
     <Content Include="ParkingApp\templates\ParkingApp\index.html" />
     <Content Include="ParkingApp\templates\ParkingApp\layout.html" />
+    <Content Include="ParkingApp\templates\ParkingApp\personal_page.html" />
+    <Content Include="ParkingApp\templates\ParkingApp\user_cars.html" />
+    <Content Include="ParkingApp\templates\ParkingApp\user_places.html" />
+    <Content Include="ParkingApp\templates\registration\logged_out.html" />
+    <Content Include="ParkingApp\templates\registration\login.html" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +63,7 @@
     <Folder Include="ParkingApp\migrations\" />
     <Folder Include="ParkingApp\static\" />
     <Folder Include="ParkingApp\templates\" />
+    <Folder Include="ParkingApp\templates\registration\" />
     <Folder Include="ParkingApp\templates\ParkingApp\" />
     <Folder Include="ParkingProject\" />
   </ItemGroup>

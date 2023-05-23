@@ -45,7 +45,7 @@ class Auto(models.Model):
 
 
 class Client(models.Model):
-    num_validetor = RegexValidator(regex=r"^+375 \(29\) \d{3}-\d{2}-\d{2}$")
+    num_validetor = RegexValidator(regex=r"^\+375 \(29\) \d{3}-\d{2}-\d{2}$")
 
     name = models.CharField(max_length=20)
     number = models.CharField(max_length=20, validators=[num_validetor], default='+375 (29) xxx-xx-xx')
