@@ -9,6 +9,7 @@ urlpatterns = [
     re_path(r'^home$', ParkingApp.views.index, name='home'),
     re_path(r'^about$', ParkingApp.views.about, name='about'),
     re_path(r'^places$', ParkingApp.views.EmptyPlacesView.as_view(), name='places'),
+    re_path(r'^registration/$', ParkingApp.views.UserRegistration, name='registration'),
     re_path(r'^personal/$', ParkingApp.views.UserProfileView.as_view(), name='user'),
     re_path(r'^personal/cars$', ParkingApp.views.UserCarsView.as_view(), name='user_cars'),
     re_path(r'^personal/createAuto/$', ParkingApp.views.createAuto, name='create_auto'),

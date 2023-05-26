@@ -1,0 +1,15 @@
+{% extends "ParkingApp/layout.html" %}
+
+{% block content %}
+{% if form.errors %}
+<p>Incorrect input. Please try again.</p>
+{% endif %}
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form }}
+    </table>
+    <input type="submit" value="Registration" />
+</form>
+{% endblock %}

@@ -1,6 +1,10 @@
 from audioop import reverse
 from msilib.schema import CreateFolder
 from urllib import response
+from django import forms
+from django.core.validators import RegexValidator
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpResponseRedirect
@@ -54,6 +58,39 @@ class UserProfileView(View):
             request,
             'ParkingApp/personal_page.html',
             context={'client' : client, })
+
+class ClientForm(forms.Form):
+    num_validetor = RegexValidator(regex=r"^\+375 \(29\) \d{3}-\d{2}-\d{2}$")
+
+    name = forms.CharField(max_length=20)
+    number = forms.CharField(max_length=20, validators=[num_validetor])
+    password = forms.CharField(max_length=20)
+
+
+
+
+def UserRegistration(request):
+    if request.method == "POST":
+        clientForm = ClientForm(request.POST)
+        if clientForm.is_valid():
+            user = User()
+            user.username = clientForm.cleaned_data['name']
+            user.password = make_password(clientForm.cleaned_data['password'])
+            user.save()
+            request.user = user
+            client = Client()
+            client.name = user.username
+            client.username = user.username
+            client.number = clientForm.cleaned_data['number']
+            client.balance = 0
+            client.save()
+            return HttpResponseRedirect('/accounts/login/')
+    else:
+        clientForm = ClientForm()
+        return render(
+            request,
+            'ParkingApp/registration.html',
+            context={'form' : clientForm, })
 
 
 class UserCarsView(generic.ListView):

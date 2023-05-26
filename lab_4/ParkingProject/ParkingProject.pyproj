@@ -52,6 +52,7 @@
     <Content Include="ParkingApp\templates\ParkingApp\index.html" />
     <Content Include="ParkingApp\templates\ParkingApp\layout.html" />
     <Content Include="ParkingApp\templates\ParkingApp\personal_page.html" />
+    <Content Include="ParkingApp\templates\ParkingApp\registration.html" />
     <Content Include="ParkingApp\templates\ParkingApp\user_cars.html" />
     <Content Include="ParkingApp\templates\ParkingApp\user_places.html" />
     <Content Include="ParkingApp\templates\registration\logged_out.html" />
