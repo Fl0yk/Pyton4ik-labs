@@ -16,6 +16,10 @@ urlpatterns = [
     path('personal/editAuto/<int:id>/', ParkingApp.views.editAuto, name='edit_auto'),
     path('personal/deleteAuto/<int:id>/', ParkingApp.views.deleteAuto, name='delete_auto'),
     re_path(r'^personal/places$', ParkingApp.views.UserPlacesView.as_view(), name='user_places'),
+    re_path(r'^personal/checks$', ParkingApp.views.UserChecksView.as_view(), name='user_checks'),
+    re_path(r'^takeplace/$', ParkingApp.views.TakePlace, name='take_place'),
+    re_path(r'^personal/upbalance/$', ParkingApp.views.UpBalance, name='up_balance'),
+    re_path(r'^adminstat/$', ParkingApp.views.AdminStatistics, name='admin_stat'),
     
     path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls)

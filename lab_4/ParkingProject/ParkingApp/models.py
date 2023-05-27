@@ -22,6 +22,7 @@ class ParkingPlace(models.Model):
 class Check(models.Model):
     dateOfActual = models.DateField(auto_now_add=True)
     place = models.ForeignKey(ParkingPlace, on_delete=models.SET_NULL, null=True, blank=True)
+    client = models.ForeignKey('Client', on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name = "Check"
@@ -51,7 +52,7 @@ class Client(models.Model):
     number = models.CharField(max_length=20, validators=[num_validetor], default='+375 (29) xxx-xx-xx')
     balance = models.DecimalField(max_digits=8, decimal_places=2)
     cars = models.ManyToManyField(Auto)
-    checks = models.ForeignKey(Check, on_delete=models.SET_NULL, null=True, blank=True)
+    #checks = models.ForeignKey(Check, on_delete=models.SET_NULL, null=True, blank=True)
     username = models.CharField(max_length=30, null=True, blank=True)
 
     class Meta:

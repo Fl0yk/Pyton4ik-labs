@@ -110,6 +110,8 @@ def createAuto(request):
         car = Auto()
         car.model = request.POST.get('model')
         car.brand = request.POST.get('brand')
+        if Auto.objects.filter(model=car.model, brand=car.brand).count() != 0:
+            return HttpResponseRedirect('/personal/cars')
         car.save()
         client.cars.add(car)
     return HttpResponseRedirect('/personal/cars')
@@ -131,6 +133,9 @@ def editAuto(request, id):
 def deleteAuto(request, id):
     try:
         car = Auto.objects.get(id=id)
+        if ParkingPlace.objects.filter(auto=car).count():
+            place = ParkingPlace.objects.filter(auto=car).get()
+            place.isEmpty = True
         car.delete()
         return HttpResponseRedirect('/personal/cars')
     except Auto.DoesNotExist:
@@ -145,5 +150,92 @@ class UserPlacesView(generic.ListView):
         client = Client.objects.get(username=self.request.user.username)
         return ParkingPlace.objects.filter(auto__in=client.cars.all())
 
+class UserChecksView(generic.ListView):
+    model = Auto
+    template_name = 'ParkingApp/user_checks.html'
 
+    def get_queryset(self):
+        client = Client.objects.get(username=self.request.user.username)
+        return client.check_set.all()
+
+def validate_place(value):
+    if ParkingPlace.objects.filter(id=value, isEmpty=True).count() == 0:
+        raise forms.ValidationError('Place not found', params={'value' : value})
+
+def validate_car(value):
+    if Auto.objects.filter(id=value).count() == 0:
+        raise forms.ValidationError('Car not found', params={'value' : value})
+
+class TakePlaceForm(forms.Form):
+    carId = forms.IntegerField(max_value=999, min_value=1, validators=[validate_car])
+    placeId = forms.IntegerField(max_value=999, min_value=1, validators=[validate_place])
+
+    
+
+
+
+def TakePlace(request):
+    if request.method == "POST":
+        form = TakePlaceForm(request.POST)
+        if form.is_valid():
+            car = Auto.objects.filter(id=form.cleaned_data['carId']).get()
+            place = ParkingPlace.objects.filter(id=form.cleaned_data['placeId']).get()
+            place.auto = car
+            place.isEmpty = False
+            place.save()
+    else:
+        form = TakePlaceForm()
+
+    empty_place = ParkingPlace.objects.filter(isEmpty__exact=True)
+    return render(
+            request,
+            'ParkingApp/take_place.html',
+            context={'form' : form,
+                     'places' : empty_place })
+
+
+def AdminStatistics(request):
+    if request.method == 'POST':
+        now = datetime.now().date()
+        for place in ParkingPlace.objects.filter(isEmpty__exact=False):
+            car = place.auto
+            owners = car.client_set.all() #Client.objects.filter(cars__contains=car)
+            check = Check()
+            check.place = place
+            check.save()
+
+            for owner in owners:
+                lastCheck = owner.check_set.filter(place=place).last()
+                if lastCheck and lastCheck.dateOfActual.year == now.year and lastCheck.dateOfActual.month == now.month:
+                    continue
+                owner.check_set.add(check)
+                owner.balance -= place.price
+                owner.save()
+
+    return render(
+        request,
+        'ParkingApp/admin_statistic.html')
+
+
+
+class BalanceForm(forms.Form):
+    money = forms.DecimalField(min_value=0, max_digits=6, decimal_places=2)
+
+
+def UpBalance(request):
+    if request.method == "POST":
+        form = BalanceForm(request.POST)
+        if form.is_valid():
+            client = Client.objects.get(username=request.user.username)
+            client.balance += form.cleaned_data['money']
+            client.save()
+            return HttpResponseRedirect('/personal/')
+    else:
+        form = BalanceForm()
+
+    return render(
+            request,
+            'ParkingApp/up_balance.html',
+            context={'form' : form })
+    
 

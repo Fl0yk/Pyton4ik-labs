@@ -19,7 +19,7 @@
 <ul>
     {% for car in object_list %}
     <li>
-        Brand: {{ car.brand }} Model: {{ car.model }} <a href="editAuto/{{ car.id }}">Edit</a> | <a href="deleteAuto/{{ car.id }}">Delete</a>
+        ID: {{ car.id }}  Brand: {{ car.brand }} Model: {{ car.model }} <a href="editAuto/{{ car.id }}">Edit</a> | <a href="deleteAuto/{{ car.id }}">Delete</a>
     </li>
     {% endfor %}
 

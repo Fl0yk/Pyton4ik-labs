@@ -8,8 +8,8 @@
     <li>Balance: {{ client.balance }}</li>
     <li><a href="{% url 'user_cars' %}">My cars</a></li>
     <li><a href="{% url 'user_places' %}">My parking places</a></li>
-    <li><a href="#">My checks</a></li>
-    <li><a href="#">Take a place</a></li>
-    <li><a href="#">Top up balance</a></li>
+    <li><a href="{% url 'user_checks' %}">My checks</a></li>
+    <li><a href="{% url 'take_place' %}">Take a place</a></li>
+    <li><a href="{% url 'up_balance' %}">Top up balance</a></li>
 </ul>
 {% endblock %}

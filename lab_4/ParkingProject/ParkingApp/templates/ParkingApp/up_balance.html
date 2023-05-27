@@ -1,0 +1,22 @@
+{% extends "ParkingApp/layout.html" %}
+
+{% block content %}
+<form action="" method="POST">
+    {% csrf_token %}
+    {% if form.errors %}
+    <p>Incorrect input. Please try again.</p>
+    {% endif %}
+
+    <ul>
+        {% for field in form %}
+        <li>
+            {{ field.label_tag }} {{ field }}
+            {% if field.help_text %}
+            (format: {{ field.help_text }})
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    <input type="submit" value="Top up balance" />
+</form>
+{% endblock %}
