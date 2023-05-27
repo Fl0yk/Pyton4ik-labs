@@ -63,9 +63,9 @@ class ClientForm(forms.Form):
     num_validetor = RegexValidator(regex=r"^\+375 \(29\) \d{3}-\d{2}-\d{2}$")
 
     name = forms.CharField(max_length=20)
-    number = forms.CharField(max_length=20, validators=[num_validetor])
-    password = forms.CharField(max_length=20)
-
+    mail = forms.EmailField()
+    number = forms.CharField(max_length=20, validators=[num_validetor], help_text="+375 (29) xxx-xx-xx")
+    password = forms.CharField(widget=forms.PasswordInput())
 
 
 
@@ -75,6 +75,7 @@ def UserRegistration(request):
         if clientForm.is_valid():
             user = User()
             user.username = clientForm.cleaned_data['name']
+            user.email = clientForm.cleaned_data['mail']
             user.password = make_password(clientForm.cleaned_data['password'])
             user.save()
             request.user = user
@@ -87,7 +88,8 @@ def UserRegistration(request):
             return HttpResponseRedirect('/accounts/login/')
     else:
         clientForm = ClientForm()
-        return render(
+
+    return render(
             request,
             'ParkingApp/registration.html',
             context={'form' : clientForm, })

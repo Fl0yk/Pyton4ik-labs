@@ -57,6 +57,11 @@
     <Content Include="ParkingApp\templates\ParkingApp\user_places.html" />
     <Content Include="ParkingApp\templates\registration\logged_out.html" />
     <Content Include="ParkingApp\templates\registration\login.html" />
+    <Content Include="ParkingApp\templates\registration\password_reset_complete.html" />
+    <Content Include="ParkingApp\templates\registration\password_reset_confirm.html" />
+    <Content Include="ParkingApp\templates\registration\password_reset_done.html" />
+    <Content Include="ParkingApp\templates\registration\password_reset_email.html" />
+    <Content Include="ParkingApp\templates\registration\password_reset_form.html" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
