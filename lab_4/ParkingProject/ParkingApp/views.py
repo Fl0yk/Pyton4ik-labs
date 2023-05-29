@@ -1,4 +1,6 @@
 from audioop import reverse
+import requests
+import random
 from msilib.schema import CreateFolder
 from urllib import response
 from django import forms
@@ -15,6 +17,11 @@ from .models import Auto, ParkingPlace, Client, Check
 
 def index(request):
     now = datetime.now()
+    url = 'https://official-joke-api.appspot.com/random_joke'
+    res = requests.get(url).json()
+
+    joke_setup = res['setup']
+    joke_punch = res['punchline']
 
     num_empty_placces=ParkingPlace.objects.filter(isEmpty__exact=True).count()
 
@@ -24,17 +31,25 @@ def index(request):
         # "index.html", # Use this code for VS 2017 15.7 and earlier
         {
             'content' : now.strftime("%d/%m/%y"),
-            'num_empty_placces' : num_empty_placces
+            'num_empty_placces' : num_empty_placces,
+            'setup' : joke_setup,
+            'punch' : joke_punch
         } 
     )
 
 def about(request):
+    url = 'https://pokeapi.co/api/v2/pokemon/' + str(random.randint(1, 1010))
+    res = requests.get(url).json()
+
+    pokemon_name = res['name']
+    pokemon_image = res['sprites']['front_default']
     return render(
         request,
         "ParkingApp/about.html",
         {
-            'title' : "About HelloDjangoApp",
-            'content' : "Example app page for Django."
+            'title' : "Bobik",
+            'name' : pokemon_name,
+            'image' : pokemon_image
         }
     )
 

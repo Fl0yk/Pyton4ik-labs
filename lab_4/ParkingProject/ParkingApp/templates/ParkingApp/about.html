@@ -1,14 +1,8 @@
 {% extends "ParkingApp/layout.html" %}
-<html>
-<head>
-    <title>{{ title }}</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'site.css' %}" />
-</head>
-<body>
-    <div><a href="home">Home</a></div>
-    {% block content %}
-    {{ content }}
-    {% endblock %}
-</body>
-</html>
+
+{% block content %}
+<h1>{{ title }}</h1>
+<p>There should be a text here</p>
+<h2>POKEMOOOON {{ name }}</h2>
+<img src={{ image }} width="120" height="120"/>
+{% endblock %}
