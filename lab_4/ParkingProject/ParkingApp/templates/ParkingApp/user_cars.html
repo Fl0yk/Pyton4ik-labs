@@ -1,11 +1,14 @@
 {% extends "ParkingApp/layout.html" %}
 
 {% block content %}
-<form action="createAuto/" method="POST">
+<form action="" method="POST">
     {% csrf_token %}
+    {% if form.errors %}
+    <p>Incorrect input. Please try again.</p>
+    {% endif %}
     <p>
         <label>Input brand</label><br>
-        <input type="text" name="brand"/>
+        <input type="text" name="brand" />
     </p>
     <p>
         <label>Input model</label><br>

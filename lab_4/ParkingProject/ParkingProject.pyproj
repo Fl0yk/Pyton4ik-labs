@@ -37,6 +37,15 @@
     <Compile Include="ParkingApp\migrations\__init__.py" />
     <Compile Include="ParkingApp\models.py" />
     <Compile Include="ParkingApp\tests.py" />
+    <Compile Include="ParkingApp\tests\conftest.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ParkingApp\tests\constans.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ParkingApp\tests\test_views.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ParkingApp\views.py" />
     <Compile Include="ParkingApp\__init__.py" />
     <Compile Include="ParkingProject\__init__.py" />
@@ -66,11 +75,15 @@
     <Content Include="ParkingApp\templates\registration\password_reset_done.html" />
     <Content Include="ParkingApp\templates\registration\password_reset_email.html" />
     <Content Include="ParkingApp\templates\registration\password_reset_form.html" />
+    <Content Include="pytest.ini">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ParkingApp\" />
     <Folder Include="ParkingApp\migrations\" />
+    <Folder Include="ParkingApp\tests\" />
     <Folder Include="ParkingApp\static\" />
     <Folder Include="ParkingApp\templates\" />
     <Folder Include="ParkingApp\templates\registration\" />

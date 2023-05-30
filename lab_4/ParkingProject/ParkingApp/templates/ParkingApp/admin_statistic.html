@@ -6,4 +6,7 @@
     {% csrf_token %}
     <input type="submit" value="Write off money" />
 </form>
+<div style="width: 700px; height: 500px;">
+    {{plot|safe}}
+</div>
 {% endblock %}

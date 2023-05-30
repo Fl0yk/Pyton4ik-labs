@@ -5,6 +5,13 @@
     {% csrf_token %}
     {% if form.errors %}
     <p>Incorrect input. Please try again.</p>
+    <ul>
+        {% for field, er in form.errors.items %}
+        <li>
+            {{ er }}
+        </li>
+        {% endfor %}
+    </ul>
     {% endif %}
 
     <ul>
